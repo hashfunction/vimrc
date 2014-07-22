@@ -5,6 +5,7 @@ filetype plugin indent on
 syntax on
 
 set showcmd
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 syntax enable
 set grepprg=grep\ -nH\ $*
