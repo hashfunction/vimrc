@@ -32,8 +32,8 @@ set incsearch
 set hlsearch
 
 let g:clipbrdDefaultReg = '+'
-:map <leader>y "0y
-:map <leader>p "0p
+noremap y "0y
+noremap p "0p
 
 set backup
 set history=200
