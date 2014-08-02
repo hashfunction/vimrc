@@ -32,8 +32,6 @@ set incsearch
 set hlsearch
 
 let g:clipbrdDefaultReg = '+'
-noremap y "0y
-noremap p "0p
 
 set backup
 set history=200
@@ -46,6 +44,7 @@ set undodir=~/.vim/undo//
 set autochdir
 
 au BufWritePost *.js :!node %:p
+au BufWritePost * :Obsess ~/.session
 
 au FileType gitcommit set tw=68 spell
 set viminfo='10,\"100,:20,%,n~/.viminfo'
