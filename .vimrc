@@ -43,7 +43,6 @@ set undodir=~/.vim/undo//
 
 set autochdir
 
-au BufWritePost *.js :!node %:p
 au BufWritePost * :Obsess ~/.session
 
 au FileType gitcommit set tw=68 spell
