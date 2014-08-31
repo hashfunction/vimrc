@@ -34,16 +34,20 @@ set hlsearch
 let g:clipbrdDefaultReg = '+'
 
 set backup
-set history=200
+set undofile
+set history=1000
 set undolevels=1000
-set updatecount=100
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swp//
-set undodir=~/.vim/undo//
+set updatecount=1000
+set backupdir=~/.vim/backup/
+set directory=~/.vim/swp/
+set undodir=~/.vim/undo/
 
 set autochdir
 
 au BufWritePost * :Obsess ~/.session
+
+au BufWritePost *.java  :!javac %:p && java %:r
+au BufWritePost *.js :!node %:p
 
 au FileType gitcommit set tw=68 spell
 set viminfo='10,\"100,:20,%,n~/.viminfo'
@@ -126,3 +130,66 @@ augroup JumpCursorOnEdit
  \ unlet b:doopenfold |
  \ endif
 augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => CtrlP
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+highlight Pmenu ctermbg=238 gui=bold
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
+let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
+let g:ctrlp_match_window_bottom = 1   " show the match window at the top of the screen
+let g:ctrlp_max_height = 8      " maxiumum height of match window
+let g:ctrlp_switch_buffer = 'et'    " jump to a file if it's open already
+let g:ctrlp_use_caching = 1       " enable caching
+let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
+let g:ctrlp_show_hidden = 1       " show me dotfiles
+let g:ctrlp_mruf_max = 250        " number of recently opened files
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Unite
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:unite_source_history_yank_enable = 1
+let g:unite_data_directory='~/.vim/.cache/unite'
+let g:unite_source_rec_max_cache_files=5000
+let g:unite_enable_start_insert = 1
+let g:unite_split_rule = "botright"
+let g:unite_force_overwrite_statusline = 0
+let g:unite_winheight = 10
+
+call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+      \ 'ignore_pattern', join([
+      \ '\.git/',
+      \ 'git5/.*/review/',
+      \ 'google/obj/',
+      \ ], '\|'))
+
+" Use the fuzzy matcher for everything
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+
+" Use the rank sorter for everything
+call unite#filters#sorter_default#use(['sorter_rank'])
+
+nnoremap <space>/ :Unite grep:.<cr>
+nnoremap <space>y :Unite history/yank<cr>
+nnoremap <leader>f :Unite file_rec<cr>
+nnoremap <leader>c :Unite colorscheme -auto-preview<cr>
+
+autocmd FileType unite call s:unite_settings()
+
+function! s:unite_settings()
+  let b:SuperTabDisabled=1
+  "imap <buffer> <C-j> <NOP>
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+  imap <silent><buffer><expr> <C-x> unite#do_action('split')
+  imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+  imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
+
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+endfunction
