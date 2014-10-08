@@ -1,168 +1,131 @@
-[![Stories in Ready](https://badge.waffle.io/Shougo/unite.vim.png)](https://waffle.io/Shougo/unite.vim)  
-![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
+# ack.vim
 
-The unite or unite.vim plug-in can search and display information from
-arbitrary sources like files, buffers, recently used files or registers.  You
-can run several pre-defined actions on a target displayed in the unite window.
+This plugin is a front for the Perl module
+[App::Ack](http://search.cpan.org/~petdance/ack/ack).  Ack can be used as a
+replacement for 99% of the uses of _grep_.  This plugin will allow you to run
+ack from vim, and shows the results in a split window.
 
-The difference between unite and similar plug-ins like fuzzyfinder,
-ctrl-p or ku is that unite provides an integration interface for several
-sources and you can create new interfaces using unite.
+## Installation
 
-![](https://s3.amazonaws.com/github-csexton/unite-01.gif)
+### Ack
+
+You will need the ack(>= 2.0), of course, to install it follow the
+[manual](http://beyondgrep.com/install/)
+
+### The Plugin
+
+To install it is recommended to use one of the popular package managers for Vim,
+rather than installing by drag and drop all required files into your `.vim` folder.
+
+#### Manual (not recommended)
+
+Just
+[download](https://github.com/mileszs/ack.vim/archive/kb-improve-readme.zip) the
+plugin and put it in your `~/.vim/`(or `%PROGRAMFILES%/Vim/vimfiles` on windows)
+
+#### Vundle
+
+    Bundle 'mileszs/ack.vim'
+
+#### NeoBundle
+
+    NeoBundle 'mileszs/ack.vim'
 
 ## Usage
 
-Run unite to display files and buffers as sources to pick from.
+    :Ack [options] {pattern} [{directories}]
 
-	:Unite file buffer
+Search recursively in {directory} (which defaults to the current directory) for
+the {pattern}.
 
+Files containing the search term will be listed in the split window, along with
+the line number of the occurrence, once for each occurrence.  [Enter] on a line
+in this window will open the file, and place the cursor on the matching line.
 
-Run unite with an initial filter value (foo) to narrow down files.
+Just like where you use :grep, :grepadd, :lgrep, and :lgrepadd, you can use
+`:Ack`, `:AckAdd`, `:LAck`, and `:LAckAdd` respectively.
+(See `doc/ack.txt`, or install and `:h Ack` for more information.)
 
-	:Unite -input=foo file
+For more ack options see
+[ack documentation](http://beyondgrep.com/documentation/)
 
+### Keyboard Shortcuts
 
-If you start unite it splits the window horizontally and pops up
-from the top of Vim by default.
+In the quickfix window, you can use:
 
-	:Unite file
+    o    to open (same as enter)
+    O    to open and close quickfix window
+    go   to preview file (open but maintain focus on ack.vim results)
+    t    to open in new tab
+    T    to open in new tab silently
+    h    to open in horizontal split
+    H    to open in horizontal split silently
+    v    to open in vertical split
+    gv   to open in vertical split silently
+    q    to close the quickfix window
 
-The example call above lists all the files in the current directory. You can
-choose one of them in the unite window by moving the cursor up and down
-as usual with j and k. If you type Enter on an active candidate it will open
-it in a new buffer. Enter triggers the default action for a candidate which is
-"open" for candidates of the kind "file". You can also select an alternative
-action for a candidate with <Tab>. See also `unite-action` to read on about
-actions.
+This Vim plugin is derived (and by derived, I mean copied, essentially) from
+Antoine Imbert's blog post
+[Ack and Vim Integration](http://blog.ant0ine.com/typepad/2007/03/ack-and-vim-integration.html)
+(in particular, the function at the bottom of the post).  I added a help file that
+provides just enough reference to get you going.  I also highly recommend you
+check out the docs for the Perl script 'ack', for obvious reasons:
+[ack - grep-like text finder](http://beyondgrep.com/).
 
-You can also narrow down the list of candidates by a keyword. If you change
-into the insert mode inside of a unite window, the cursor drops you behind the
-">" in the second line from above. There you can start typing to filter the
-candidates.  You can also use the wild card `*` as an arbitrary character
-sequence. For example,
+### Gotchas
 
-	*hisa
+Some characters have special meaning, and need to be escaped your search
+pattern. For instance, '#'. You have to escape it like this `:Ack '\\\#define
+foo'` to search for '#define foo'. (From blueyed in issue #5.)
 
-matches hisa, ujihisa, or ujihisahisa. Furthermore, two consecutive wild cards
-match a directory recursively.
+## Changelog
 
-	**/foo
+### 1.0
 
-So the example above matches bar/foo or buzz/bar/foo.
-Note: The unite action `file_rec` does a recursive file matching by default
-without the need to set wildcards.
+* Remove support to ack 1.x
+* Start to use a Changelog
+* Use `autoload` directory to define functions, instead of `plugin`.
+* Add option to auto fold the results(`g:ack_autofold_results`)
+* Improve documentation, list all options and shortcuts
+* Improve highlight option to work when passes directories or use quotes.
+* Add g:ack_mapping
+* Add g:ack_default_options
+* Add a help toggle `?`(like NERDTree)
 
-You can also specify multiple keywords to narrow down the candidates. Multiple
-keywords need to be separated either by a space " " or a dash "|". The
-examples below match for candidates that meet both conditions "foo" and "bar".
+### 1.0.1
 
-	foo bar
-	foo|bar
+* Fixes #124. Bug with `g:ack_autofold_results`
 
-You can also specify negative conditions with an exclamation mark "!".  This
-matches candidates that meet "foo" but do not meet "bar".
+### 1.0.2
 
-	foo !bar
+* Add compatibility with [vim-dispatch](https://github.com/tpope/vim-dispatch)
 
-Wild cards are added automatically if you add a "/" in the filter and you have
-specified "files" as the buffer name with the option "-buffer-name". That's
-handy in case you select files with unite.
+### 1.0.3
 
-	:Unite -buffer-name=files file
+* Fixes #127. Use `&l:hlsearch` instead of `v:hlsearch` to keep compatibility
+with versions that does not have this variable.
 
-See also `unite_default_key_mappings` for other actions.
+### 1.0.4
 
-There is also a screencast available which shows unite in action. Thanks to
-ujihisa! http://www.ustream.tv/recorded/11240673
+* Fixes #128. Always apply mappings, even when using vim-dispatch.
 
-## Install
+### 1.0.5
 
-Install the distributed files into your Vim script directory which is usually
-`~/.vim/`, or `$HOME/vimfiles` on Windows. You should consider using one of the
-famous package managers for Vim like vundle or neobundle to install the
-plugin.
+* Fixes #128. Fixes the `errorformat` for ack when using vim-dispatch.
+* Do not use vim-dispatch by default. To use vim-dispath must set
+`g:ack_use_dispatch`
 
-After installation you can run unite with the `:Unite` command and append the
-sources to the command you wish to select from as parameters. However, it's a
-pain in the ass to run the command explicitly every time, so I recommend you
-to set a key mapping for the command. See `:h unite`.
+### 1.0.6
 
-Note: MRU sources are splitted.  To use mru sources, you must install neomru.
-https://github.com/Shougo/neomru.vim
+* Fixes highlight function to work when user passes options. Ex.: Ack -i test
+  Thank's @mannih. (#131, #134)
 
-## Resources
+### 1.0.7
 
-* [Unite plugins (in Japanese)](https://github.com/Shougo/unite.vim/wiki/unite-plugins)
-* [Unite.vim, the Plugin You Didn't Know You Need](http://bling.github.io/blog/2013/06/02/unite-dot-vim-the-plugin-you-didnt-know-you-need/)
-* [Replacing All The Things with Unite.vim — Codeography](http://www.codeography.com/2013/06/17/replacing-all-the-things-with-unite-vim.html)
-* [Beginner's Guide to Unite](http://usevim.com/2013/06/19/unite/)
-* [Standards: How to make a Unite plugin](http://ujihisa.blogspot.jp/2010/11/how-to-make-unite-plugin.html)
-* [FAQ (`:h unite-faq`)](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt#L3325)
+* Fixes highlight function to work when passes more than one option, or options
+with double dashes(--option) Thank's to @MiguelLatorre and @mannih
 
+### 1.0.8
 
-## Screen shots
-
-unite file source
------------------
-![Unite file source.](http://gyazo.com/7379f1041084632c66faef9caf3e1f09.png)
-
-unite action source
--------------------
-![Unite action source.](http://gyazo.com/c5c000170f28926aaf83d0c47bc5fcbb.png)
-
-unite output source
--------------------
-![Unite output source.](http://cdn-ak.f.st-hatena.com/images/fotolife/o/osyo-manga/20130307/20130307101224.png)
-
-unite mapping source
---------------------
-![Unite mapping source.](http://cdn-ak.f.st-hatena.com/images/fotolife/o/osyo-manga/20130307/20130307101225.png)
-
-unite menu source
------------------
-![Unite menu source.](http://cdn-ak.f.st-hatena.com/images/fotolife/o/osyo-manga/20130307/20130307101227.png)
-
-unite menu source with customization
-------------------------------------
-![Unite menu source with customization.](https://f.cloud.github.com/assets/390964/734885/82b91006-e2e1-11e2-9957-fb279bc71311.png)
-
-	let g:unite_source_menu_menus.git = {
-	    \ 'description' : '            gestionar repositorios git
-	        \                            ⌘ [espacio]g',
-	    \}
-	let g:unite_source_menu_menus.git.command_candidates = [
-	    \['▷ tig                                                        ⌘ ,gt',
-	        \'normal ,gt'],
-	    \['▷ git status       (Fugitive)                                ⌘ ,gs',
-	        \'Gstatus'],
-	    \['▷ git diff         (Fugitive)                                ⌘ ,gd',
-	        \'Gdiff'],
-	    \['▷ git commit       (Fugitive)                                ⌘ ,gc',
-	        \'Gcommit'],
-	    \['▷ git log          (Fugitive)                                ⌘ ,gl',
-	        \'exe "silent Glog | Unite quickfix"'],
-	    \['▷ git blame        (Fugitive)                                ⌘ ,gb',
-	        \'Gblame'],
-	    \['▷ git stage        (Fugitive)                                ⌘ ,gw',
-	        \'Gwrite'],
-	    \['▷ git checkout     (Fugitive)                                ⌘ ,go',
-	        \'Gread'],
-	    \['▷ git rm           (Fugitive)                                ⌘ ,gr',
-	        \'Gremove'],
-	    \['▷ git mv           (Fugitive)                                ⌘ ,gm',
-	        \'exe "Gmove " input("destino: ")'],
-	    \['▷ git push         (Fugitive, salida por buffer)             ⌘ ,gp',
-	        \'Git! push'],
-	    \['▷ git pull         (Fugitive, salida por buffer)             ⌘ ,gP',
-	        \'Git! pull'],
-	    \['▷ git prompt       (Fugitive, salida por buffer)             ⌘ ,gi',
-	        \'exe "Git! " input("comando git: ")'],
-	    \['▷ git cd           (Fugitive)',
-	        \'Gcd'],
-	    \]
-	nnoremap <silent>[menu]g :Unite -silent -start-insert menu:git<CR>
-
-## Special Thanks
-
-* Dragon Image was originally from [Stanislav](http://All-Silhouettes.com)
+* Fixes (again) highlight, now using negative look behind.
+* Change mappings `o` and `O` to behave as documented

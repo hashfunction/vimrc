@@ -149,6 +149,8 @@ let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache 
 let g:ctrlp_show_hidden = 1       " show me dotfiles
 let g:ctrlp_mruf_max = 250        " number of recently opened files
 
+let g:ctrlp_cmd = 'CtrlPLastMode'
+let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Unite
