@@ -69,11 +69,14 @@ inoremap } <c-r>=CloseBracket()<CR>
 inoremap " <c-r>=QuoteDelim('"')<CR>
 inoremap ' <c-r>=QuoteDelim("'")<CR>
 
+
 nnoremap <Tab> >>_
 nnoremap <S-Tab> <<_
 inoremap <S-Tab> <C-D>
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv>>
+
+set tags=./tags,tags;$HOME
 
 function ClosePair(char)
  if getline('.')[col('.') - 1] == a:char
