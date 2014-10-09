@@ -9,6 +9,7 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 syntax enable
 set grepprg=grep\ -nH\ $*
+set scrolloff=999
 
 set autoindent
 set expandtab
