@@ -46,8 +46,8 @@ set autochdir
 
 au BufWritePost * :Obsess ~/.session
 
-au BufWritePost *.java  :!javac %:p && java %:r
-au BufWritePost *.js :!node %:p
+""au BufWritePost *.java  :!javac %:p && java %:r
+""au BufWritePost *.js :!node %:p
 
 au FileType gitcommit set tw=68 spell
 set viminfo='10,\"100,:20,%,n~/.viminfo'
