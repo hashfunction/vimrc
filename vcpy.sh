@@ -2,5 +2,7 @@
 cp .vimrc ~/
 cp .bash_profile ~/
 cp -rf .vim ~/
-npm install -g js-beautify
-
+mkdir ~/.vim/swp
+mkdir ~/.vim/tmp
+mkdir ~/.vim/undo
+mkdir ~/.vim/backup

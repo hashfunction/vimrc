@@ -4,6 +4,10 @@ nnoremap : ;
 filetype plugin indent on
 syntax on
 
+syntax enable
+set background=dark
+colorscheme solarized
+
 set showcmd
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
