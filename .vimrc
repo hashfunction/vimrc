@@ -40,9 +40,9 @@ let g:clipbrdDefaultReg = '+'
 
 set backup
 set undofile
-set history=1000
-set undolevels=1000
-set updatecount=1000
+set history=100000
+set undolevels=100000
+set updatecount=100000
 set backupdir=~/.vim/backup/
 set directory=~/.vim/swp/
 set undodir=~/.vim/undo/
