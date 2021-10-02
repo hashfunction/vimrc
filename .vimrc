@@ -40,7 +40,7 @@ let g:clipbrdDefaultReg = '+'
 
 set backup
 set undofile
-set history=100000
+set history=10000
 set undolevels=100000
 set updatecount=100000
 set backupdir=~/.vim/backup/
